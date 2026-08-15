@@ -72,13 +72,6 @@ def create_access_token(user: models.User, remember_me: bool = False) -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
-def ensure_user_table_columns(db: Session):
-    has_full_name = db.execute(text("SHOW COLUMNS FROM users LIKE 'full_name'")).fetchone()
-    if not has_full_name:
-        db.execute(text("ALTER TABLE users ADD COLUMN full_name VARCHAR(100) NULL"))
-        db.execute(text("UPDATE users SET full_name = name WHERE full_name IS NULL"))
-        db.commit()
-
 app = FastAPI(
     title="MailGuard AI - Enterprise Email Threat Detection API",
     description="AI-Powered Email Spam, Phishing, & Threat Classification REST API for Cognizant AI/ML Hackathon",
@@ -122,11 +115,6 @@ def load_ml_artifacts():
 @app.on_event("startup")
 def startup_event():
     load_ml_artifacts()
-    db = next(get_db())
-    try:
-        ensure_user_table_columns(db)
-    finally:
-        db.close()
 
 # Pydantic Schema Definitions
 class LoginRequest(BaseModel):

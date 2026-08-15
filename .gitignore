@@ -69,3 +69,14 @@ Thumbs.db
 # Temporary / Test Files
 # ==============================
 dataset/test_download.bin
+
+# ==============================
+# Temporary Python Files
+# ==============================
+*.tmp
+*.temp
+
+# ==============================
+# Jupyter Notebook Checkpoints
+# ==============================
+.ipynb_checkpoints/
