@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, Lock, Mail, Eye, EyeOff, LogIn, User, ArrowLeft, AlertCircle, UserPlus } from 'lucide-react';
 import { authAPI } from '../services/api';
-import loginIllustrationImg from '../assets/login_illustration.jpg';
+import landingHeroImg from '../assets/landing_hero.jpg';
 
 export default function LoginPage({ mode = 'login', onLoginSuccess, onBackToLanding, onSwitchMode }) {
   const isSignup = mode === 'signup';
@@ -262,7 +262,7 @@ export default function LoginPage({ mode = 'login', onLoginSuccess, onBackToLand
           <div className="w-full max-w-sm space-y-6">
             <div className="rounded-2xl overflow-hidden shadow-xl border border-white bg-white p-2">
               <img
-                src={loginIllustrationImg}
+                src={landingHeroImg}
                 alt="MailGuard AI Email Security"
                 className="w-full h-auto object-cover rounded-xl"
               />

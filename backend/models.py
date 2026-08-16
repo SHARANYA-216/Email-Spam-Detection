@@ -72,3 +72,18 @@ class ModelVersion(Base):
     recall = Column(Float, nullable=False)
     f1_score = Column(Float, nullable=False)
     is_active = Column(Integer, default=1)
+class GmailConnection(Base):
+    __tablename__ = "gmail_connections"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
+    gmail_email = Column(String(255), nullable=False)
+    credentials_json = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow
+    )
+
+    user = relationship("User")

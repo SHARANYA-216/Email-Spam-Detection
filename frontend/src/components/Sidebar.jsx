@@ -1,11 +1,20 @@
 import React from 'react';
-import { LayoutDashboard, SearchCode, History, Settings, Shield, LogOut } from 'lucide-react';
+import {
+  LayoutDashboard,
+  SearchCode,
+  History,
+  Settings,
+  Shield,
+  LogOut,
+  Mail
+} from 'lucide-react';
 
 export default function Sidebar({ currentTab, setCurrentTab, onLogout }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'analyze', label: 'Analyze Email', icon: SearchCode },
     { id: 'history', label: 'Email History', icon: History },
+    { id: 'gmail', label: 'Gmail Inbox', icon: Mail },
     { id: 'settings', label: 'User Settings', icon: Settings },
   ];
 
