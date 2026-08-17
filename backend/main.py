@@ -82,6 +82,12 @@ GOOGLE_REDIRECT_URI = os.getenv(
     "GOOGLE_REDIRECT_URI",
     "https://email-spam-detection-oyhu.onrender.com/gmail/callback"
 )
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://localhost:3000"
+)
+
 GOOGLE_CLIENT_CONFIG = {
     "web": {
         "client_id": GOOGLE_CLIENT_ID,
@@ -1610,7 +1616,7 @@ def gmail_callback(
 
         # Redirect back to React
         return RedirectResponse(
-            url="http://localhost:3000/?gmail=connected"
+            url=f"{FRONTEND_URL}/?gmail=connected"
         )
 
     except Exception as e:
