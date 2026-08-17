@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://127.0.0.1:8000"
+    : "https://email-spam-detection-oyhu.onrender.com";;
 
 function GmailInboxView({ onAnalyzeEmail }) {
     const [emails, setEmails] = useState([]);
