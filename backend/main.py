@@ -1794,7 +1794,7 @@ def get_gmail_inbox(
             .messages()
             .list(
                 userId="me",
-                labelIds=["INBOX"],
+                q="{in:inbox in:spam}",
                 maxResults=20
             )
             .execute()

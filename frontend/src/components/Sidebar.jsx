@@ -14,7 +14,7 @@ export default function Sidebar({ currentTab, setCurrentTab, onLogout }) {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'analyze', label: 'Analyze Email', icon: SearchCode },
     { id: 'history', label: 'Email History', icon: History },
-    { id: 'gmail', label: 'Gmail Inbox', icon: Mail },
+    { id: 'gmail', label: 'Gmail', icon: Mail },
     { id: 'settings', label: 'User Settings', icon: Settings },
   ];
 

@@ -357,7 +357,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                         font-medium
                     "
                 >
-                    ← Back to Inbox
+                    ← Back to Gmail
                 </button>
 
                 {/* EMAIL CARD */}
@@ -515,7 +515,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                                 font-semibold
                             "
                         >
-                            Back to Inbox
+                            Back to Gmail
                         </button>
 
                     </div>
@@ -555,7 +555,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                             text-slate-900
                         "
                     >
-                        Gmail Inbox
+                        Gmail Inbox & Spam
                     </h1>
 
                     <p
@@ -564,7 +564,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                             mt-1
                         "
                     >
-                        View and analyze your Gmail messages
+                        View and analyze your Gmail inbox and Spam messages
                     </p>
 
                 </div>
@@ -671,7 +671,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                                 mt-1
                             "
                         >
-                            Your Gmail inbox is empty.
+                            No Gmail Inbox or Spam messages found.
                         </p>
                     </div>
                 )}
@@ -758,7 +758,21 @@ function GmailInboxView({ onAnalyzeEmail }) {
                                                     Unread
                                                 </span>
                                             )}
-
+                                            
+                                            {email.labels?.includes("SPAM") && (
+                                                <span
+                                                    className="
+                                                            text-xs
+                                                            px-2
+                                                            py-1
+                                                            rounded-full
+                                                            bg-red-100
+                                                            text-red-700
+                                                    "
+                                                >
+                                                    Gmail Spam
+                                                </span>
+                                            )}
                                         </div>
 
                                         <h3
