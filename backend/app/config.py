@@ -6,7 +6,7 @@ import os
 from pydantic import BaseModel
 
 class Settings(BaseModel):
-    PROJECT_NAME: str = "MailGuard AI"
+    PROJECT_NAME: str = "MailGuard"
     API_PREFIX: str = "/api"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "mailguard-enterprise-super-secret-key-2026")
     ALGORITHM: str = "HS256"

@@ -92,10 +92,10 @@ export default function LoginPage({ mode = 'login', onLoginSuccess, onBackToLand
                 </div>
                 <div>
                   <h1 className="font-extrabold text-2xl text-slate-900 tracking-tight leading-none">
-                    MailGuard<span className="text-blue-600">AI</span>
+                    MailGuard<span className="text-blue-600"></span>
                   </h1>
                   <p className="text-[11px] font-semibold text-slate-400 tracking-normal mt-0.5">
-                    AI-Powered Email Spam Detection
+                    Automated Email Spam Detection
                   </p>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function LoginPage({ mode = 'login', onLoginSuccess, onBackToLand
                   {isSignup ? 'Create Your Account' : 'Welcome Back!'}
                 </h2>
                 <p className="text-slate-500 text-sm mt-1 font-medium">
-                  {isSignup ? 'Register to get started with MailGuardAI' : 'Login to continue to your account'}
+                  {isSignup ? 'Register to get started with MailGuard' : 'Login to continue to your account'}
                 </p>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function LoginPage({ mode = 'login', onLoginSuccess, onBackToLand
             <div className="rounded-2xl overflow-hidden shadow-xl border border-white bg-white p-2">
               <img
                 src={landingHeroImg}
-                alt="MailGuard AI Email Security"
+                alt="MailGuard Email Security"
                 className="w-full h-auto object-cover rounded-xl"
               />
             </div>

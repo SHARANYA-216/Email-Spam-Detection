@@ -19,7 +19,7 @@ export default function Navbar({ user }) {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 text-slate-800 font-extrabold text-sm tracking-tight">
           <Shield className="w-4 h-4 text-blue-600" />
-          <span>MailGuard AI Console</span>
+          <span>MailGuard Console</span>
         </div>
       </div>
 

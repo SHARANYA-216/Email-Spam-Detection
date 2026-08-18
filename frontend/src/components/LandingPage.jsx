@@ -21,7 +21,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
               <Shield className="w-5 h-5" />
             </div>
             <div className="font-extrabold text-xl tracking-tight text-slate-900">
-              MailGuard<span className="text-blue-600">AI</span>
+              MailGuard<span className="text-blue-600"></span>
             </div>
           </div>
 
@@ -83,7 +83,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
             {/* Pill Tag */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-extrabold tracking-wide uppercase shadow-xs">
               <Shield className="w-3.5 h-3.5 text-blue-600" />
-              <span>AI-POWERED PROTECTION</span>
+              <span>AUTOMATED EMAIL SECURITY</span>
             </div>
 
             {/* Main Headline */}
@@ -99,7 +99,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
 
             {/* Description */}
             <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-xl">
-              MailGuardAI uses advanced machine learning to detect spam emails with high accuracy and keep your inbox safe and clutter-free.
+              MailGuard uses advanced machine learning to detect spam emails with high accuracy and keep your inbox safe and clutter-free.
             </p>
 
             {/* CTA Buttons */}
@@ -141,7 +141,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
             <div className="relative w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl border border-slate-100 bg-gradient-to-b from-blue-50/50 to-slate-50/50 p-2">
               <img
                 src={landingHeroImg}
-                alt="MailGuard AI Inbox Security"
+                alt="MailGuard Inbox Security"
                 className="w-full h-auto object-cover rounded-2xl"
               />
             </div>
@@ -170,7 +170,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
                 <Cpu className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">AI-Powered Spam Detection</h3>
+              <h3 className="text-lg font-bold text-slate-900">Automated Spam Detection</h3>
               <p className="text-sm text-slate-600 leading-relaxed font-normal">
                 Trained on high-volume real-world threat corpuses with TF-IDF vectorization and optimized SVM algorithms for precision verdicts.
               </p>
@@ -252,7 +252,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
 
       <p className="mt-4 text-slate-600 text-base sm:text-lg leading-relaxed">
         Every day, phishing and spam emails attempt to steal passwords,
-        banking information, and personal data. MailGuard AI helps detect
+        banking information, and personal data. MailGuard helps detect
         suspicious emails, but user awareness remains one of the strongest
         defenses against email-based cyber threats.
       </p>
@@ -349,11 +349,11 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
             <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
               <Shield className="w-4 h-4" />
             </div>
-            <span className="font-extrabold text-sm text-slate-900 tracking-tight">MailGuard AI</span>
-            <span>— AI-Powered Email Spam Detection</span>
+            <span className="font-extrabold text-sm text-slate-900 tracking-tight">MailGuard</span>
+            <span>— Automated Email Spam Detection</span>
           </div>
           <p className="font-medium">
-            © 2026 MailGuard AI. All rights reserved.
+            © 2026 MailGuard. All rights reserved.
           </p>
         </div>
       </footer>

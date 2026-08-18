@@ -28,10 +28,10 @@ export default function Sidebar({ currentTab, setCurrentTab, onLogout }) {
           </div>
           <div>
             <h1 className="font-extrabold text-lg text-slate-900 tracking-tight leading-none">
-              MAILGUARD <span className="text-blue-600">AI</span>
+              MAILGUARD<span className="text-blue-600"></span>
             </h1>
             <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
-              Email Risk Detection
+              Email Spam Detection 
             </span>
           </div>
         </div>

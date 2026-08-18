@@ -497,7 +497,7 @@ function GmailInboxView({ onAnalyzeEmail }) {
                                 transition
                             "
                         >
-                            🤖 Analyze with MailGuard AI
+                            🤖 Analyze with MailGuard
                         </button>
 
                         <button
