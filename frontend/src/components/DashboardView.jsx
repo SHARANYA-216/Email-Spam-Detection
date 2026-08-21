@@ -281,7 +281,7 @@ export default function DashboardView({ onAnalyzeClick, onViewDetail }) {
               </div>
               <div className="text-2xl font-extrabold text-slate-900 mt-1">{r.count} <span className="text-xs font-normal text-slate-500">emails</span></div>
               <div className="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden border border-slate-200">
-                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${r.percentage}%`, backgroundColor: r.color }} />
+                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${r.percentage}%`, backgroundColor: r.level === 'LOW RISK' ? '#10b981' : r.level === 'MEDIUM RISK' ? '#f59e0b' : '#ef4444'}} />
               </div>
             </div>
           ))}
