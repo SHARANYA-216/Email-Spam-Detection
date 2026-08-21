@@ -11,6 +11,7 @@ import base64
 from email.utils import parsedate_to_datetime
 from dotenv import load_dotenv
 from email.utils import parseaddr
+from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()
 
 from google_auth_oauthlib.flow import Flow
@@ -133,19 +134,27 @@ app = FastAPI(
     version="2.0.0",
 )
 
-
 # ============================================================
 # CORS
 # ============================================================
 
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+if FRONTEND_URL and FRONTEND_URL not in ALLOWED_ORIGINS:
+    ALLOWED_ORIGINS.append(FRONTEND_URL)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # ============================================================
 # ML MODEL PATHS
@@ -2666,8 +2675,7 @@ def analyze_email(
 
 @app.post("/api/emails/upload")
 async def upload_email_file(
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    file: UploadFile = File(...)
 ):
 
     filename = (file.filename or "").lower()
@@ -2699,12 +2707,10 @@ async def upload_email_file(
             detail="The uploaded file is empty."
         )
 
-    sender = "uploaded-file-sender@unknown-domain.com"
+    # Default values
 
-    subject = (
-        f"File Upload: {file.filename}"
-    )
-
+    sender = ""
+    subject = ""
     body = ""
 
     # --------------------------------------------------------
@@ -2720,18 +2726,30 @@ async def upload_email_file(
                 policy=policy.default
             )
 
+            # ------------------------------------------------
+            # EXTRACT SENDER
+            # ------------------------------------------------
+
             sender = str(
-                msg.get("From") or sender
-            )
+                msg.get("From") or ""
+            ).strip()
+
+            # ------------------------------------------------
+            # EXTRACT SUBJECT
+            # ------------------------------------------------
 
             subject = str(
-                msg.get("Subject") or subject
-            )
+                msg.get("Subject") or ""
+            ).strip()
 
-            # Handle multipart emails
+            # ------------------------------------------------
+            # EXTRACT BODY
+            # ------------------------------------------------
+
             if msg.is_multipart():
 
-                # First try plain text
+                # First preference: text/plain
+
                 for part in msg.walk():
 
                     if (
@@ -2741,12 +2759,34 @@ async def upload_email_file(
                         != "attachment"
                     ):
 
-                        body = part.get_content()
+                        try:
 
-                        break
+                            body = part.get_content()
 
-                # If no plain text, try HTML
-                if not body:
+                        except Exception:
+
+                            payload = part.get_payload(
+                                decode=True
+                            )
+
+                            if payload:
+
+                                charset = (
+                                    part.get_content_charset()
+                                    or "utf-8"
+                                )
+
+                                body = payload.decode(
+                                    charset,
+                                    errors="ignore"
+                                )
+
+                        if body and body.strip():
+                            break
+
+                # Second preference: text/html
+
+                if not body or not body.strip():
 
                     for part in msg.walk():
 
@@ -2757,15 +2797,61 @@ async def upload_email_file(
                             != "attachment"
                         ):
 
-                            body = part.get_content()
+                            try:
 
-                            break
+                                body = part.get_content()
+
+                            except Exception:
+
+                                payload = part.get_payload(
+                                    decode=True
+                                )
+
+                                if payload:
+
+                                    charset = (
+                                        part.get_content_charset()
+                                        or "utf-8"
+                                    )
+
+                                    body = payload.decode(
+                                        charset,
+                                        errors="ignore"
+                                    )
+
+                            if body and body.strip():
+                                break
 
             else:
 
-                body = msg.get_content()
+                try:
+
+                    body = msg.get_content()
+
+                except Exception:
+
+                    payload = msg.get_payload(
+                        decode=True
+                    )
+
+                    if payload:
+
+                        charset = (
+                            msg.get_content_charset()
+                            or "utf-8"
+                        )
+
+                        body = payload.decode(
+                            charset,
+                            errors="ignore"
+                        )
 
         except Exception as e:
+
+            print(
+                "EML parsing error:",
+                repr(e)
+            )
 
             raise HTTPException(
                 status_code=400,
@@ -2787,7 +2873,7 @@ async def upload_email_file(
         )
 
     # --------------------------------------------------------
-    # VALIDATE EXTRACTED BODY
+    # VALIDATE BODY
     # --------------------------------------------------------
 
     if not body or not body.strip():
@@ -2801,16 +2887,22 @@ async def upload_email_file(
         )
 
     # --------------------------------------------------------
-    # CREATE REQUEST FOR EXISTING ANALYSIS FUNCTION
+    # RETURN EXTRACTED DATA ONLY
+    #
+    # DO NOT ANALYZE HERE.
+    # DO NOT SAVE TO DATABASE HERE.
     # --------------------------------------------------------
 
-    req = EmailAnalyzeRequest(
-        sender=sender,
-        subject=subject,
-        body=body
-    )
-
-    return analyze_email(req, db)
+    return {
+        "success": True,
+        "message": (
+            "Email file parsed successfully. "
+            "Click Analyze to analyze the email."
+        ),
+        "sender": sender.strip(),
+        "subject": subject.strip(),
+        "body": body.strip()
+    }
 
 # ============================================================
 # EMAIL HISTORY

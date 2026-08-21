@@ -165,6 +165,8 @@ export default function AnalyzeView({
                 "Unsupported file type. Please select a valid .txt or .eml file."
             );
 
+            e.target.value = "";
+
             return;
         }
 
@@ -178,8 +180,21 @@ export default function AnalyzeView({
 
         try {
 
+            console.log("Uploading file:", file);
+            console.log("File name:", file.name);
+            console.log("File type:", file.type);
+
+            const formData = new FormData();
+
+            // IMPORTANT:
+            // "file" must exactly match:
+            // file: UploadFile = File(...)
+            // in your FastAPI backend.
+
+            formData.append("file", file);
+
             const res =
-                await emailAPI.upload(file);
+                await emailAPI.upload(formData);
 
             /*
              * Depending on backend response,
@@ -187,6 +202,12 @@ export default function AnalyzeView({
              */
 
             const data = res.data;
+
+            console.log(
+                "Upload API response:",
+                data
+
+            );
 
             setResult(data);
 
@@ -209,23 +230,60 @@ export default function AnalyzeView({
                 err
             );
 
-            setErrorMsg(
-                err.response?.data?.detail ||
-                "Failed to analyze uploaded email file."
+            console.error(
+                "Backend error response:",
+                err.response?.data
             );
 
-        } finally {
+            const detail =
+                err.response?.data?.detail;
 
-            setAnalyzing(false);
+                // FastAPI 422 usually returns:
+                // [
+                //   {
+                //     type: "...",
+                //     loc: [...],
+                //     msg: "...",
+                //     input: ...
+                //   }
+                // ]
+                if (Array.isArray(detail)) {
 
-            /*
-             * Reset file input so the same file
-             * can be selected again.
-             */
+                setErrorMsg(
+                    detail
+                        .map(item =>
+                            item.msg ||
+                            JSON.stringify(item)
+                        )
+                        .join(", ")
+                );
 
-            e.target.value = "";
+            } else if (
+            detail &&
+            typeof detail === "object"
+        ) {
+
+            setErrorMsg(
+                detail.msg ||
+                JSON.stringify(detail)
+            );
+
+        } else {
+
+            setErrorMsg(
+                detail ||
+                "Failed to analyze uploaded email file."
+            );
         }
-    };
+
+    } finally {
+
+        setAnalyzing(false);
+
+        // Allow same file to be selected again.
+        e.target.value = "";
+    }
+};
 
 
     // =========================================================
