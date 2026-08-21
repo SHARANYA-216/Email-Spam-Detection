@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Shield, ArrowRight, CheckCircle2, Lock, Cpu, BarChart3, SearchCode, History, Sparkles, FileText, AlertTriangle, ChevronRight } from 'lucide-react';
 import landingHeroImg from '../assets/landing_hero.jpg';
 
 export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick }) {
+  const [activeNav, setActiveNav] = useState('home');
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -26,26 +27,51 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-600">
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-blue-600 relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:rounded-full"
-            >
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection('features')}
-              className="hover:text-slate-900 transition-colors py-1 cursor-pointer"
-            >
-              Features
-            </button>
-            <button
-              onClick={() => scrollToSection('about')}
-              className="hover:text-slate-900 transition-colors py-1 cursor-pointer"
-            >
-              About Us
-            </button>
-          </nav>
+<nav className="hidden md:flex items-center gap-10 text-sm font-semibold text-slate-600">
+
+  <button
+    onClick={() => {
+      setActiveNav('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }}
+    className={`relative py-1 transition-colors cursor-pointer ${
+      activeNav === 'home'
+        ? "text-blue-600 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:rounded-full"
+        : "hover:text-slate-900"
+    }`}
+  >
+    Home
+  </button>
+
+  <button
+    onClick={() => {
+      setActiveNav('features');
+      scrollToSection('features');
+    }}
+    className={`relative py-1 transition-colors cursor-pointer ${
+      activeNav === 'features'
+        ? "text-blue-600 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:rounded-full"
+        : "hover:text-slate-900"
+    }`}
+  >
+    Features
+  </button>
+
+  <button
+    onClick={() => {
+      setActiveNav('about');
+      scrollToSection('about');
+    }}
+    className={`relative py-1 transition-colors cursor-pointer ${
+      activeNav === 'about'
+        ? "text-blue-600 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-blue-600 after:rounded-full"
+        : "hover:text-slate-900"
+    }`}
+  >
+    About Us
+  </button>
+
+</nav>
 
  {/* Right Actions */}
 <div className="flex items-center gap-3">
