@@ -28,9 +28,7 @@ export const emailAPI = {
   upload: (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    return api.post('/emails/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    return api.post('/emails/upload', formData);
   },
   getHistory: (params) => api.get('/emails/history', { params }),
   getDetail: (id) => api.get(`/emails/${id}`),

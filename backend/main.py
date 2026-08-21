@@ -1795,7 +1795,7 @@ def get_gmail_inbox(
             .list(
                 userId="me",
                 q="{in:inbox in:spam}",
-                maxResults=20
+                maxResults=50
             )
             .execute()
         )
@@ -1807,38 +1807,7 @@ def get_gmail_inbox(
 
         inbox = []
 
-        # ----------------------------------------------------
-        # HELPER: DECODE GMAIL BODY
-        # ----------------------------------------------------
-
-        def decode_gmail_body(data):
-
-            if not data:
-                return ""
-
-            try:
-
-                decoded_bytes = (
-                    base64.urlsafe_b64decode(
-                        data + "=" * (
-                            4 - len(data) % 4
-                        ) % 4
-                    )
-                )
-
-                return decoded_bytes.decode(
-                    "utf-8",
-                    errors="ignore"
-                )
-
-            except Exception as e:
-
-                print(
-                    "Gmail body decode error:",
-                    e
-                )
-
-                return ""
+        
 
         # ----------------------------------------------------
         # HELPER: EXTRACT BODY
@@ -2691,6 +2660,158 @@ def analyze_email(
             else None
         ),
     }
+# ============================================================
+# UPLOAD EMAIL FILE
+# ============================================================
+
+@app.post("/api/emails/upload")
+async def upload_email_file(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+
+    filename = (file.filename or "").lower()
+
+    # --------------------------------------------------------
+    # VALIDATE FILE TYPE
+    # --------------------------------------------------------
+
+    if not filename.endswith((".txt", ".eml")):
+
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Unsupported file format. "
+                "Please upload a .txt or .eml file."
+            )
+        )
+
+    # --------------------------------------------------------
+    # READ FILE CONTENT
+    # --------------------------------------------------------
+
+    content_bytes = await file.read()
+
+    if not content_bytes:
+
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty."
+        )
+
+    sender = "uploaded-file-sender@unknown-domain.com"
+
+    subject = (
+        f"File Upload: {file.filename}"
+    )
+
+    body = ""
+
+    # --------------------------------------------------------
+    # PARSE .EML FILE
+    # --------------------------------------------------------
+
+    if filename.endswith(".eml"):
+
+        try:
+
+            msg = eml_parser.message_from_bytes(
+                content_bytes,
+                policy=policy.default
+            )
+
+            sender = str(
+                msg.get("From") or sender
+            )
+
+            subject = str(
+                msg.get("Subject") or subject
+            )
+
+            # Handle multipart emails
+            if msg.is_multipart():
+
+                # First try plain text
+                for part in msg.walk():
+
+                    if (
+                        part.get_content_type()
+                        == "text/plain"
+                        and part.get_content_disposition()
+                        != "attachment"
+                    ):
+
+                        body = part.get_content()
+
+                        break
+
+                # If no plain text, try HTML
+                if not body:
+
+                    for part in msg.walk():
+
+                        if (
+                            part.get_content_type()
+                            == "text/html"
+                            and part.get_content_disposition()
+                            != "attachment"
+                        ):
+
+                            body = part.get_content()
+
+                            break
+
+            else:
+
+                body = msg.get_content()
+
+        except Exception as e:
+
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "Could not parse the .eml file: "
+                    + str(e)
+                )
+            )
+
+    # --------------------------------------------------------
+    # PARSE .TXT FILE
+    # --------------------------------------------------------
+
+    else:
+
+        body = content_bytes.decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+    # --------------------------------------------------------
+    # VALIDATE EXTRACTED BODY
+    # --------------------------------------------------------
+
+    if not body or not body.strip():
+
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No readable email content "
+                "was found in the uploaded file."
+            )
+        )
+
+    # --------------------------------------------------------
+    # CREATE REQUEST FOR EXISTING ANALYSIS FUNCTION
+    # --------------------------------------------------------
+
+    req = EmailAnalyzeRequest(
+        sender=sender,
+        subject=subject,
+        body=body
+    )
+
+    return analyze_email(req, db)
+
 # ============================================================
 # EMAIL HISTORY
 # ============================================================
