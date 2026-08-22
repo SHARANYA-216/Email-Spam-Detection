@@ -1737,6 +1737,38 @@ def extract_gmail_body(payload):
 
     return ""
 # ============================================================
+# GMAIL BODY DECODER
+# ============================================================
+
+def decode_gmail_body(data):
+    """
+    Decode Gmail's URL-safe Base64 body data safely.
+
+    Gmail may omit Base64 padding, so padding is restored before decoding.
+    """
+    if not data:
+        return ""
+
+    try:
+        if isinstance(data, str):
+            data += "=" * (-len(data) % 4)
+
+        return base64.urlsafe_b64decode(
+            data
+        ).decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+    except Exception as e:
+        print(
+            "Gmail body decode error:",
+            e
+        )
+        return ""
+
+
+# ============================================================
 # GMAIL INBOX
 # ============================================================
 
