@@ -178,6 +178,13 @@ export default function AnalyzeView({
 
         setErrorMsg("");
 
+        // Clear any previous analysis immediately. Uploading a file
+        // only extracts and populates the email fields; it must not
+        // display analysis results until the user clicks Analyze.
+        setResult(null);
+        setFeedbackSubmitted(false);
+        setShowCorrectionDropdown(false);
+
         try {
 
             console.log("Uploading file:", file);
@@ -209,7 +216,11 @@ export default function AnalyzeView({
 
             );
 
-            setResult(data);
+            // IMPORTANT:
+            // The upload endpoint only parses the .txt/.eml file.
+            // Do not store the upload response as an analysis result.
+            // Results are shown only after handleAnalyze() calls the
+            // actual analysis API.
 
             if (data.sender) {
                 setSender(data.sender);
@@ -314,30 +325,16 @@ export default function AnalyzeView({
         }
 
         // -----------------------------------------------------
-        // VALIDATE SUBJECT
+        // VALIDATE EMAIL CONTENT
+        // Subject-only, body-only, or both are supported.
         // -----------------------------------------------------
 
         if (
-            !subject ||
-            !subject.trim()
+            (!subject || !subject.trim()) &&
+            (!body || !body.trim())
         ) {
             setErrorMsg(
-                "Please enter an email subject line."
-            );
-
-            return;
-        }
-
-        // -----------------------------------------------------
-        // VALIDATE BODY
-        // -----------------------------------------------------
-
-        if (
-            !body ||
-            !body.trim()
-        ) {
-            setErrorMsg(
-                "Please enter an email body before analyzing."
+                "Please enter an email subject or body before analyzing."
             );
 
             return;

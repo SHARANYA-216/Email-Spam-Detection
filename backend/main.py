@@ -1737,6 +1737,38 @@ def extract_gmail_body(payload):
 
     return ""
 # ============================================================
+# GMAIL BODY DECODER
+# ============================================================
+
+def decode_gmail_body(data):
+    """
+    Decode Gmail's URL-safe Base64 body data safely.
+
+    Gmail may omit Base64 padding, so padding is restored before decoding.
+    """
+    if not data:
+        return ""
+
+    try:
+        if isinstance(data, str):
+            data += "=" * (-len(data) % 4)
+
+        return base64.urlsafe_b64decode(
+            data
+        ).decode(
+            "utf-8",
+            errors="ignore"
+        )
+
+    except Exception as e:
+        print(
+            "Gmail body decode error:",
+            e
+        )
+        return ""
+
+
+# ============================================================
 # GMAIL INBOX
 # ============================================================
 
@@ -2253,13 +2285,14 @@ def analyze_email(
     body = (payload.body or "").strip()
 
     # --------------------------------------------------------
-    # 2. VALIDATE BODY
+    # 2. VALIDATE EMAIL CONTENT
+    # Subject-only, body-only, or both are supported.
     # --------------------------------------------------------
 
-    if not body:
+    if not subject and not body:
         raise HTTPException(
             status_code=400,
-            detail="Please enter an email body before analyzing."
+            detail="Please enter an email subject or body before analyzing."
         )
 
     # --------------------------------------------------------
@@ -2285,18 +2318,8 @@ def analyze_email(
             detail="Please provide a valid sender email address."
         )
 
-    # --------------------------------------------------------
-    # 5. VALIDATE SUBJECT
-    # --------------------------------------------------------
-
-    if not subject:
-        raise HTTPException(
-            status_code=400,
-            detail="Please enter an email subject."
-        )
-
     # ========================================================
-    # 6. CLASSIFICATION
+    # 5. CLASSIFICATION
     # ========================================================
 
     classification_result = classify_email(
@@ -2873,15 +2896,19 @@ async def upload_email_file(
         )
 
     # --------------------------------------------------------
-    # VALIDATE BODY
+    # VALIDATE EXTRACTED CONTENT
+    # Subject-only, body-only, or both are valid.
     # --------------------------------------------------------
 
-    if not body or not body.strip():
+    subject = (subject or "").strip()
+    body = (body or "").strip()
+
+    if not subject and not body:
 
         raise HTTPException(
             status_code=400,
             detail=(
-                "No readable email content "
+                "No readable email subject or body "
                 "was found in the uploaded file."
             )
         )

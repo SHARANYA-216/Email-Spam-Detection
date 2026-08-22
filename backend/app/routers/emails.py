@@ -32,13 +32,14 @@ router = APIRouter(prefix="/emails", tags=["Emails"])
 
 def _execute_analysis_and_store(sender: str, subject: str, body: str, file_type: str, db: Session, user: Optional[User] = None):
     sender = (sender or "").strip() or "unknown-sender@external-domain.net"
-    subject = (subject or "").strip() or "No Subject"
+    subject = (subject or "").strip()
     body = (body or "").strip()
-    
-    if not body:
+
+    # Accept subject-only, body-only, or both. Reject only when both are empty.
+    if not subject and not body:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Please enter an email body before analyzing."
+            detail="Please enter an email subject or body before analyzing."
         )
         
     # 1. Run ML classification & structural signal analysis
