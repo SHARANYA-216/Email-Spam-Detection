@@ -1,76 +1,26 @@
 {
-  "active_model": "Support Vector Machine (Linear SVM)",
-  "algorithm_type": "CalibratedClassifierCV",
-  "model_version": "v1.2.0-cognizant-hackathon",
-  "dataset_size": 5000,
-  "train_size": 4000,
-  "test_size": 1000,
-  "training_date": "2026-08-20",
-  "accuracy": 0.895,
-  "precision": 0.8998,
-  "recall": 0.8909,
-  "f1_score": 0.8953,
-  "confusion_matrix": [
-    [
-      446,
-      50
-    ],
-    [
-      55,
-      449
+  "model_version": "v1.3.865-retrained",
+  "algorithm": "Support Vector Machine (Calibrated LinearSVC)",
+  "training_date": "2026-08-14 06:41:06Z",
+  "total_dataset_size": 5957,
+  "train_samples": 4765,
+  "test_samples": 1192,
+  "feedback_samples_added": 8,
+  "champion_metrics": {
+    "name": "Support Vector Machine (SVM)",
+    "accuracy": 0.8950,
+    "precision": 0.8998,
+    "recall": 0.8909,
+    "f1_score": 0.8958,
+    "confusion_matrix": [
+      [
+        602,
+        9
+      ],
+      [
+        4,
+        577
+      ]
     ]
-  ],
-  "models_performance": {
-    "Support Vector Machine (Linear SVM)": {
-      "cv_f1_score": 0.9047,
-      "accuracy": 0.895,
-      "precision": 0.8998,
-      "recall": 0.8909,
-      "f1_score": 0.8953,
-      "confusion_matrix": [
-        [
-          446,
-          50
-        ],
-        [
-          55,
-          449
-        ]
-      ]
-    },
-    "Naive Bayes (MultinomialNB)": {
-      "cv_f1_score": 0.9047,
-      "accuracy": 0.895,
-      "precision": 0.8998,
-      "recall": 0.8909,
-      "f1_score": 0.8953,
-      "confusion_matrix": [
-        [
-          446,
-          50
-        ],
-        [
-          55,
-          449
-        ]
-      ]
-    },
-    "Logistic Regression": {
-      "cv_f1_score": 0.9047,
-      "accuracy": 0.895,
-      "precision": 0.8998,
-      "recall": 0.8909,
-      "f1_score": 0.8953,
-      "confusion_matrix": [
-        [
-          446,
-          50
-        ],
-        [
-          55,
-          449
-        ]
-      ]
-    }
   }
 }

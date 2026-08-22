@@ -149,7 +149,7 @@ export default function LandingPage({ onGetStarted, onLoginClick, onSignUpClick 
             <div className="pt-6 border-t border-slate-100 flex flex-wrap items-center gap-6 text-xs font-semibold text-slate-500">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>98.8% Accuracy Model</span>
+                <span>89.50% Accuracy Model</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
